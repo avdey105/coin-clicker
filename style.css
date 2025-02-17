@@ -84,18 +84,19 @@ body {
 #top-bar {
     display: flex;
     align-items: center;
-    gap: 1%;
-    margin-top: 2vh;
+    gap: 10px;
+    width: auto;
+    margin: 0 auto;
+    padding: 12px 25px !important;
     background: #ffffff;
-    padding: 1vh 2%;
     border-radius: 20px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    width: 95%;
 }
 
 #coins-counter {
-    font-size: 2.5vw;
+    font-size: 3em;
     color: #333333;
+    white-space: nowrap;
 }
 
 #spinning-coin {
@@ -219,7 +220,7 @@ body {
 /* Адаптация для маленьких экранов */
 @media (max-width: 600px) {
     #coins-counter {
-        font-size: 4vw;
+        font-size: 12vw;
     }
     
     #tap-text {
@@ -235,7 +236,7 @@ body {
 /* Ограничение максимального размера */
 @media (min-width: 1200px) {
     #coins-counter {
-        font-size: 24px;
+        font-size: 72px;
     }
     
     #tap-text {
@@ -269,4 +270,54 @@ body {
 /* Для области клика */
 #click-animation {
     -webkit-touch-callout: none;
+}
+
+@media (min-width: 600px) {
+    #game-container {
+        width: 56.25vh; /* 9/16 соотношение */
+        height: 100vh;
+        max-width: 400px;
+        max-height: 711px;
+        margin: auto;
+        position: relative;
+        overflow: hidden;
+        border-radius: 20px;
+        box-shadow: 0 0 30px rgba(0,0,0,0.2);
+    }
+
+    #top-bar {
+        margin-top: 4vh;
+        padding: 15px 30px !important;
+    }
+
+    #coins-counter {
+        font-size: 6.6vh;
+    }
+
+    #spinning-coin {
+        width: 6vh;
+        height: 6vh;
+    }
+
+    #tap-text {
+        font-size: 2.5vh;
+        margin: 3vh 0;
+    }
+
+    #click-area {
+        height: 65vh;
+        padding-bottom: 8vh;
+    }
+
+    #click-animation {
+        width: 50vh;
+        height: 50vh;
+    }
+}
+
+/* Для очень высоких экранов */
+@media (min-height: 800px) and (min-width: 600px) {
+    #game-container {
+        transform: scale(1.1);
+    }
 } 
