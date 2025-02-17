@@ -1,0 +1,272 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #ffffff;
+    color: #333333;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#intro-video-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2000;
+    background: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.video-mask {
+    width: 300px;
+    height: 300px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 50%;
+    transform-origin: center center;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.video-mask.visible {
+    opacity: 1;
+}
+
+/* Добавляем класс для анимации */
+.video-mask.shrink {
+    animation: maskShrink 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+#intro-video {
+    width: 300px;
+    height: 300px;
+    object-fit: cover;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@keyframes maskShrink {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(0);
+        opacity: 0;
+    }
+}
+
+#game-container {
+    width: 100%;
+    height: 100vh;
+    display: none; /* Изначально скрыт */
+    flex-direction: column;
+    align-items: center;
+    padding: 2%;
+    background: #f5f5f5;
+    opacity: 0;
+    transition: opacity 0.3s ease-in;
+    position: relative;
+}
+
+#top-bar {
+    display: flex;
+    align-items: center;
+    gap: 1%;
+    margin-top: 2vh;
+    background: #ffffff;
+    padding: 1vh 2%;
+    border-radius: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    width: 95%;
+}
+
+#coins-counter {
+    font-size: 2.5vw;
+    color: #333333;
+}
+
+#spinning-coin {
+    width: 8vw;
+    height: 8vw;
+    background: url('assets/images/coin.gif') center/contain no-repeat;
+}
+
+#tap-text {
+    font-size: 2vw;
+    color: #666;
+    margin: 2vh 0;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+#click-area {
+    flex: 1;
+    width: 100%;
+    height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    overflow: visible;
+    padding-bottom: 5vh;
+}
+
+#click-animation {
+    width: 80vw;
+    height: 80vh;
+    background: url('assets/images/tap.png') center/contain no-repeat;
+    transform-origin: center;
+    position: relative;
+    z-index: 1;
+    transition: filter 0.3s ease;
+}
+
+#placeholder-buttons {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.placeholder-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    background: #e0e0e0;
+    color: #666666;
+    cursor: not-allowed;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+#loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.loader {
+    color: #333333;
+    font-size: 20px;
+}
+
+.start-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 60px;
+    background: #000000;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 2001;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 0;
+}
+
+/* Белый треугольник внутри кнопки */
+.start-button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 55%;
+    transform: translate(-50%, -50%);
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 12px 0 12px 20px;
+    border-color: transparent transparent transparent #ffffff;
+    transition: opacity 0.2s ease;
+}
+
+/* Состояние при анимации */
+.start-button.expanding {
+    width: 300px;
+    height: 300px;
+    background: rgba(0, 0, 0, 0);
+}
+
+.start-button.expanding::before {
+    opacity: 0;
+}
+
+/* Адаптация для маленьких экранов */
+@media (max-width: 600px) {
+    #coins-counter {
+        font-size: 4vw;
+    }
+    
+    #tap-text {
+        font-size: 3.5vw;
+    }
+    
+    #spinning-coin {
+        width: 12vw;
+        height: 12vw;
+    }
+}
+
+/* Ограничение максимального размера */
+@media (min-width: 1200px) {
+    #coins-counter {
+        font-size: 24px;
+    }
+    
+    #tap-text {
+        font-size: 20px;
+    }
+    
+    #spinning-coin {
+        width: 45px;
+        height: 45px;
+    }
+}
+
+/* Отключаем подсветку при тапе для всех интерактивных элементов */
+#click-area,
+.start-button,
+#tap-text,
+#spinning-coin {
+    -webkit-tap-highlight-color: transparent;
+    tap-highlight-color: transparent;
+    outline: none;
+}
+
+/* Дополнительно для кнопки запуска */
+.start-button {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+/* Для области клика */
+#click-animation {
+    -webkit-touch-callout: none;
+} 
