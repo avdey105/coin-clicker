@@ -106,7 +106,7 @@ body {
 }
 
 #tap-text {
-    font-size: 4vw;
+    font-size: 2.7vw;
     color: #666;
     margin: 2vh 0;
     user-select: none;
@@ -139,6 +139,7 @@ body {
     position: relative;
     z-index: 1;
     transition: filter 0.3s ease;
+    transform: translateY(-10%);
 }
 
 #placeholder-buttons {
@@ -224,7 +225,7 @@ body {
     }
     
     #tap-text {
-        font-size: 7vw;
+        font-size: 4.7vw;
     }
     
     #spinning-coin {
@@ -240,7 +241,7 @@ body {
     }
     
     #tap-text {
-        font-size: 40px;
+        font-size: 27px;
     }
     
     #spinning-coin {
@@ -300,7 +301,7 @@ body {
     }
 
     #tap-text {
-        font-size: 5vh;
+        font-size: 3.3vh;
         margin: 3vh 0;
     }
 
