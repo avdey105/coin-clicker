@@ -105,16 +105,6 @@ body {
     background: url('assets/images/coin.gif') center/contain no-repeat;
 }
 
-#tap-text {
-    font-size: 2.7vw;
-    color: #666;
-    margin: 2vh 0;
-    user-select: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-}
-
 #click-area {
     flex: 1;
     width: 100%;
@@ -224,10 +214,6 @@ body {
         font-size: 8vw;
     }
     
-    #tap-text {
-        font-size: 4.7vw;
-    }
-    
     #spinning-coin {
         width: 12vw;
         height: 12vw;
@@ -240,10 +226,6 @@ body {
         font-size: 48px;
     }
     
-    #tap-text {
-        font-size: 27px;
-    }
-    
     #spinning-coin {
         width: 45px;
         height: 45px;
@@ -253,7 +235,6 @@ body {
 /* Отключаем подсветку при тапе для всех интерактивных элементов */
 #click-area,
 .start-button,
-#tap-text,
 #spinning-coin {
     -webkit-tap-highlight-color: transparent;
     tap-highlight-color: transparent;
@@ -298,11 +279,6 @@ body {
     #spinning-coin {
         width: 6vh;
         height: 6vh;
-    }
-
-    #tap-text {
-        font-size: 3.3vh;
-        margin: 3vh 0;
     }
 
     #click-area {
