@@ -2,6 +2,8 @@ let tg = window.Telegram.WebApp;
 let coins = 0;
 let isAnimating = false;
 let resetTimeout;
+let clickCount = 0;
+let resetTimer = null;
 
 // Функция для обработки видео-интро
 function handleIntroVideo() {
@@ -97,6 +99,18 @@ document.getElementById('click-area').addEventListener('click', async () => {
         clickElement.style.animation = '';
         isAnimating = false;
     }, 100);
+
+    // Обновляем счетчик кликов
+    clickCount = Math.min(clickCount + 1, 50); // Максимум 50 кликов
+    const maskOpacity = clickCount * 0.008; // 0-0.4 opacity (100-60% прозрачности)
+    document.querySelector('.click-mask').style.opacity = maskOpacity;
+
+    // Сбрасываем таймер при каждом клике
+    clearTimeout(resetTimer);
+    resetTimer = setTimeout(() => {
+        clickCount = 0;
+        document.querySelector('.click-mask').style.opacity = 0;
+    }, 3000);
 });
 
 // Обновление отображения монет
