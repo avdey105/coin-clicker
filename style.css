@@ -366,33 +366,4 @@ body {
     0% { transform: rotate(0deg); }
     50% { transform: rotate(2deg); }
     100% { transform: rotate(0deg); }
-}
-
-/* Для мобильных устройств */
-@media (max-width: 600px) {
-    #click-animation {
-        width: 105vw; /* 70vw * 1.5 */
-        height: 105vw;
-        max-width: 450px; /* 300px * 1.5 */
-        max-height: 450px;
-        margin-top: 3vh;
-    }
-
-    .click-mask {
-        background-size: 150% 150%; /* Увеличиваем маску */
-        background-position: center center;
-    }
-
-    /* Корректируем позицию для компенсации размера */
-    #click-area {
-        padding-bottom: 8vh;
-    }
-}
-
-/* Для очень маленьких экранов */
-@media (max-width: 400px) {
-    #click-animation {
-        width: 120vw;
-        height: 120vw;
-    }
 } 

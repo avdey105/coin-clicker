@@ -80,8 +80,7 @@ document.getElementById('click-area').addEventListener('click', async () => {
     const clickElement = document.getElementById('click-animation');
     
     // Фиксируем базовый translateY из CSS
-    const baseTranslate = window.innerWidth >= 1024 ? '-8%' : 
-                        window.innerWidth <= 600 ? '-3%' : '-5%'; // Добавляем отдельное значение для мобилок
+    const baseTranslate = window.innerWidth >= 1024 ? '-8%' : '-5%';
     
     // Применяем поворот с сохранением позиции
     clickElement.style.transform = `translateY(${baseTranslate}) rotate(2deg)`;
