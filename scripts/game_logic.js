@@ -79,15 +79,18 @@ document.getElementById('click-area').addEventListener('click', async () => {
     isAnimating = true;
     const clickElement = document.getElementById('click-animation');
     
-    // Фиксируем базовый translateY из CSS
-    const baseTranslate = window.innerWidth >= 1024 ? '-8%' : '-5%';
+    // Получаем текущие трансформации
+    const computedStyle = window.getComputedStyle(clickElement);
+    const currentTransform = computedStyle.transform;
     
-    // Применяем поворот с сохранением позиции
-    clickElement.style.transform = `translateY(${baseTranslate}) rotate(2deg)`;
+    // Применяем поворот с сохранением текущего масштаба
+    clickElement.style.transform = `${currentTransform} rotate(2deg)`;
     
     setTimeout(() => {
-        // Возвращаем только базовый translateY
-        clickElement.style.transform = `translateY(${baseTranslate})`;
+        // Возвращаем исходные трансформации
+        const baseTranslate = window.innerWidth >= 1024 ? '-8%' : '-5%';
+        const scale = window.innerWidth < 600 ? 'scale(1.3)' : 'scale(1)';
+        clickElement.style.transform = `translateY(${baseTranslate}) ${scale}`;
         isAnimating = false;
     }, 50);
     
