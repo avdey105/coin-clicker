@@ -4,6 +4,7 @@ let isAnimating = false;
 let resetTimeout;
 let clickCount = 0;
 let resetTimer = null;
+let currentAnimation = null;
 
 // Функция для обработки видео-интро
 function handleIntroVideo() {
@@ -76,12 +77,22 @@ document.getElementById('click-area').addEventListener('click', async () => {
     if (isAnimating) return;
     
     isAnimating = true;
+    const clickElement = document.getElementById('click-animation');
+    
+    // Фиксируем базовый translateY из CSS
+    const baseTranslate = window.innerWidth >= 1024 ? '-8%' : '-5%';
+    
+    // Применяем поворот с сохранением позиции
+    clickElement.style.transform = `translateY(${baseTranslate}) rotate(2deg)`;
+    
+    setTimeout(() => {
+        // Возвращаем только базовый translateY
+        clickElement.style.transform = `translateY(${baseTranslate})`;
+        isAnimating = false;
+    }, 50);
+    
     coins++;
     updateCoinsDisplay();
-    
-    // Анимация нажатия с уменьшенной длительностью
-    const clickElement = document.getElementById('click-animation');
-    clickElement.style.animation = 'tap-animation 0.05s steps(2)';
     
     // Проигрывание звука
     const sound = document.getElementById('tap-sound');
@@ -95,22 +106,41 @@ document.getElementById('click-area').addEventListener('click', async () => {
         console.error('Ошибка при сохранении прогресса:', error);
     }
     
-    setTimeout(() => {
-        clickElement.style.animation = '';
-        isAnimating = false;
-    }, 100);
-
     // Обновляем счетчик кликов
-    clickCount = Math.min(clickCount + 1, 50); // Максимум 50 кликов
-    const maskOpacity = clickCount * 0.008; // 0-0.4 opacity (100-60% прозрачности)
-    document.querySelector('.click-mask').style.opacity = maskOpacity;
-
-    // Сбрасываем таймер при каждом клике
+    clickCount = Math.min(clickCount + 1, 50);
+    const maskOpacity = clickCount * 0.008;
+    const maskElement = document.querySelector('.click-mask');
+    maskElement.style.opacity = maskOpacity;
+    
+    // Отменяем предыдущие анимации и таймеры
+    if (currentAnimation) {
+        cancelAnimationFrame(currentAnimation);
+        currentAnimation = null;
+    }
     clearTimeout(resetTimer);
+    
+    // Запускаем новый таймер для начала исчезновения
     resetTimer = setTimeout(() => {
-        clickCount = 0;
-        document.querySelector('.click-mask').style.opacity = 0;
-    }, 3000);
+        const startTime = Date.now();
+        const startOpacity = maskOpacity;
+        
+        const animateFade = () => {
+            const elapsed = Date.now() - startTime;
+            const progress = Math.min(elapsed / 2800, 1); // 2.8 секунды анимации
+            const currentOpacity = startOpacity * (1 - progress);
+            
+            maskElement.style.opacity = currentOpacity;
+            
+            if (progress < 1) {
+                currentAnimation = requestAnimationFrame(animateFade);
+            } else {
+                clickCount = 0;
+                currentAnimation = null;
+            }
+        };
+        
+        currentAnimation = requestAnimationFrame(animateFade);
+    }, 200); // Начинаем исчезать через 200 мс
 });
 
 // Обновление отображения монет
