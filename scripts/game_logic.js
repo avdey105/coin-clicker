@@ -5,6 +5,9 @@ let resetTimeout;
 let clickCount = 0;
 let resetTimer = null;
 let currentAnimation = null;
+let currentSection = 'clicker';
+let timerSeconds = 0; // Общее время в секундах
+let totalCoins = 0;   // Общее количество монет
 
 // Функция для обработки видео-интро
 function handleIntroVideo() {
@@ -14,26 +17,13 @@ function handleIntroVideo() {
         const videoMask = document.querySelector('.video-mask');
         const gameContainer = document.getElementById('game-container');
         const startButton = document.getElementById('start-video');
+        const skipButton = document.getElementById('skip-intro');
+        const bottomContainer = document.querySelector('.intro-bottom-container');
         
-        // Обработчик нажатия на кнопку
-        startButton.addEventListener('click', () => {
-            startButton.classList.add('expanding');
-            
-            setTimeout(() => {
-                videoMask.classList.add('visible');
-                video.muted = false;
-                video.volume = 1;
-                video.play().catch(error => {
-                    console.error('Ошибка воспроизведения видео:', error);
-                    video.muted = true;
-                    video.play();
-                });
-            }, 300); // Время анимации расширения кнопки
-        });
-
-        // Когда видео закончится
-        video.addEventListener('ended', () => {
+        // Функция для завершения интро
+        const finishIntro = () => {
             videoMask.classList.add('shrink');
+            bottomContainer.classList.remove('visible');
             
             setTimeout(() => {
                 videoContainer.style.display = 'none';
@@ -41,7 +31,33 @@ function handleIntroVideo() {
                 gameContainer.style.opacity = '1';
                 resolve();
             }, 300);
+        };
+        
+        // Обработчик нажатия на кнопку старта
+        startButton.addEventListener('click', () => {
+            startButton.classList.add('expanding');
+            
+            setTimeout(() => {
+                videoMask.classList.add('visible');
+                bottomContainer.classList.add('visible'); // Показываем нижнюю кнопку
+                video.muted = false;
+                video.volume = 1;
+                video.play().catch(error => {
+                    console.error('Ошибка воспроизведения видео:', error);
+                    video.muted = true;
+                    video.play();
+                });
+            }, 300);
         });
+
+        // Обработчик нажатия на нижнее изображение
+        skipButton.addEventListener('click', () => {
+            video.pause();
+            finishIntro();
+        });
+
+        // Когда видео закончится
+        video.addEventListener('ended', finishIntro);
 
         // Обработка ошибок
         video.addEventListener('error', () => {
@@ -54,8 +70,26 @@ function handleIntroVideo() {
 
 // Инициализация при загрузке
 document.addEventListener('DOMContentLoaded', async () => {
+    // Проверяем и устанавливаем начальное отображение секций
+    const gameContainer = document.getElementById('game-container');
+    const calendarSection = document.getElementById('calendar-section');
+    const leaderboardSection = document.getElementById('leaderboard-section');
+    
+    // Убедимся, что только секция кликера отображается при загрузке
+    gameContainer.style.display = 'flex';
+    gameContainer.style.opacity = '0'; // Начально прозрачный до окончания видео
+    
+    calendarSection.style.display = 'none';
+    calendarSection.style.opacity = '0';
+    
+    leaderboardSection.style.display = 'none';
+    leaderboardSection.style.opacity = '0';
+    
     // Сначала проигрываем интро
     await handleIntroVideo();
+
+    // После интро показываем секцию кликера
+    gameContainer.style.opacity = '1';
 
     // Загрузка сохраненного прогресса
     try {
@@ -68,8 +102,22 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.error('Ошибка при загрузке прогресса:', error);
     }
 
-    // Скрыть загрузочный экран
-    document.getElementById('loading-screen').style.display = 'none';
+    // Скрыть загрузочный экран если он существует
+    const loadingScreen = document.getElementById('loading-screen');
+    if (loadingScreen) {
+        loadingScreen.style.display = 'none';
+    }
+
+    const firstBtn = document.querySelector('.nav-btn.active');
+    updateNavBackground(firstBtn);
+
+    // Инициализация позиции подложки
+    const initialActiveBtn = document.querySelector('.nav-btn.active');
+    updateNavBackground(initialActiveBtn);
+
+    // Инициализация значений по умолчанию
+    updateTimerDisplay();
+    updateTotalCoinsDisplay();
 });
 
 // Обработчик клика
@@ -79,17 +127,20 @@ document.getElementById('click-area').addEventListener('click', async () => {
     isAnimating = true;
     const clickElement = document.getElementById('click-animation');
     
-    // Получаем текущие трансформации
+    // Явно задаем начальные трансформации
+    const baseTranslate = '-15%';
+    const scale = window.innerWidth < 600 ? 'scale(1.3)' : 'scale(1)';
+    clickElement.style.transform = `translateY(${baseTranslate}) ${scale}`;
+    
+    // Получаем текущие трансформации после инициализации
     const computedStyle = window.getComputedStyle(clickElement);
     const currentTransform = computedStyle.transform;
     
-    // Применяем поворот с сохранением текущего масштаба
+    // Применяем поворот
     clickElement.style.transform = `${currentTransform} rotate(2deg)`;
     
     setTimeout(() => {
-        // Возвращаем исходные трансформации
-        const baseTranslate = window.innerWidth >= 1024 ? '-8%' : '-5%';
-        const scale = window.innerWidth < 600 ? 'scale(1.3)' : 'scale(1)';
+        // Возвращаем к исходным значениям
         clickElement.style.transform = `translateY(${baseTranslate}) ${scale}`;
         isAnimating = false;
     }, 50);
@@ -170,4 +221,178 @@ style.textContent = `
     to { opacity: 1; }
 }
 `;
-document.head.appendChild(style); 
+document.head.appendChild(style);
+
+// Добавляем обработчики
+document.querySelectorAll('.nav-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const section = this.dataset.section;
+        if (section === currentSection) return;
+        
+        // Убираем активный класс у всех кнопок
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        
+        // Управление отображением секций
+        const gameContainer = document.getElementById('game-container');
+        const calendarSection = document.getElementById('calendar-section');
+        const leaderboardSection = document.getElementById('leaderboard-section');
+        
+        gameContainer.style.display = section === 'clicker' ? 'flex' : 'none';
+        gameContainer.style.opacity = section === 'clicker' ? '1' : '0';
+        
+        calendarSection.style.display = section === 'calendar' ? 'flex' : 'none';
+        calendarSection.style.opacity = section === 'calendar' ? '1' : '0';
+        
+        leaderboardSection.style.display = section === 'leaderboard' ? 'flex' : 'none';
+        leaderboardSection.style.opacity = section === 'leaderboard' ? '1' : '0';
+        
+        currentSection = section;
+        updateNavBackground(this);
+        
+        // Обновляем данные при переходе на календарь
+        if(section === 'calendar') {
+            updateTimerDisplay();
+            updateTotalCoinsDisplay();
+        }
+        
+        // Загружаем данные лидерборда при переходе на соответствующую секцию
+        if(section === 'leaderboard') {
+            loadLeaderboard();
+        }
+    });
+});
+
+function updateNavBackground(activeBtn) {
+    const nav = document.querySelector('.bottom-nav');
+    const bg = document.querySelector('.nav-bg');
+    const activeIndex = Array.from(nav.querySelectorAll('.nav-btn')).indexOf(activeBtn);
+    
+    // Новые позиции в процентах
+    const positions = {
+        0: 2.5,   // Первая кнопка
+        1: 35,    // Вторая кнопка
+        2: 67.5   // Третья кнопка
+    };
+    
+    // Устанавливаем новую позицию
+    bg.style.left = `${positions[activeIndex]}%`;
+    
+    // Добавляем небольшую задержку для плавности анимации
+    requestAnimationFrame(() => {
+        bg.style.transition = 'left 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+    });
+}
+
+// Функция для обновления таймера
+function updateTimerDisplay() {
+    const days = Math.floor(timerSeconds / 86400);
+    const hours = Math.floor((timerSeconds % 86400) / 3600);
+    const minutes = Math.floor((timerSeconds % 3600) / 60);
+    const seconds = timerSeconds % 60;
+    
+    const timerElement = document.getElementById('calendar-timer');
+    if(timerElement) {
+        timerElement.textContent = 
+            `${String(days).padStart(2, '0')}:${String(hours).padStart(2, '0')}:` +
+            `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    }
+}
+
+// Функция для обновления общего количества монет
+function updateTotalCoinsDisplay() {
+    const coinsElement = document.getElementById('total-coins');
+    if(coinsElement) {
+        coinsElement.textContent = totalCoins;
+    }
+}
+
+// Функция для форматирования больших чисел (K для тысяч, M для миллионов)
+function formatNumber(number) {
+    if (number >= 1000000) {
+        return (number / 1000000).toFixed(1) + 'M';
+    } else if (number >= 1000) {
+        return (number / 1000).toFixed(1) + 'K';
+    }
+    return number.toString();
+}
+
+// Функция загрузки и отображения лидерборда
+function loadLeaderboard() {
+    const topPlayersList = document.getElementById('top-players');
+    if (!topPlayersList) return;
+    
+    // Очистка текущего содержимого
+    topPlayersList.innerHTML = '';
+    
+    // Пробуем получить данные (в реальности будет запрос к серверу)
+    // Для демонстрации используем тестовые данные
+    let topPlayers = [];
+    
+    try {
+        // В будущем здесь будет запрос к серверу
+        // Сейчас просто используем моковые данные
+        topPlayers = [
+            {
+                "position": 1,
+                "username": "Авдей",
+                "coins": 1000000,
+                "photo_url": "assets/images/winner1.png"
+            }
+        ];
+    } catch (error) {
+        console.error('Ошибка при загрузке данных лидерборда:', error);
+    }
+    
+    // Если данных нет, показываем дефолтного победителя
+    if (topPlayers.length === 0) {
+        topPlayers = [
+            {
+                "position": 1,
+                "username": "Авдей",
+                "coins": 1000000,
+                "photo_url": "assets/images/winner1.png"
+            }
+        ];
+    }
+    
+    // Создаем элементы списка для каждого игрока
+    topPlayers.forEach(player => {
+        const playerItem = document.createElement('li');
+        playerItem.className = 'player-item';
+        
+        // Определяем, какое изображение использовать
+        let photoUrl = player.photo_url;
+        if (!photoUrl) {
+            if (player.position === 1) {
+                photoUrl = "assets/images/winner1.png";
+            } else if (player.position <= 10) {
+                photoUrl = "assets/images/top10.png";
+            } else if (player.position <= 30) {
+                photoUrl = "assets/images/top30.png";
+            } else if (player.position <= 100) {
+                photoUrl = "assets/images/top100.png";
+            } else {
+                photoUrl = "assets/images/default-player.png";
+            }
+        }
+        
+        // Форматируем количество монет
+        const formattedCoins = formatNumber(player.coins);
+        
+        // Создаем HTML для элемента списка
+        playerItem.innerHTML = `
+            <div class="player-position">${player.position}</div>
+            <div class="player-avatar">
+                <img src="${photoUrl}" alt="${player.username}">
+            </div>
+            <div class="player-info">
+                <div class="player-name">${player.username}</div>
+                <div class="player-coins">${formattedCoins}</div>
+            </div>
+        `;
+        
+        topPlayersList.appendChild(playerItem);
+    });
+}
+

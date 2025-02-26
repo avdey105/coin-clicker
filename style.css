@@ -2,6 +2,14 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+html {
+    -webkit-tap-highlight-color: transparent;
 }
 
 body {
@@ -23,62 +31,59 @@ body {
     z-index: 2000;
     background: #ffffff;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: flex-start;
     align-items: center;
+    padding: 0 20px;
 }
 
 .video-mask {
-    width: 300px;
-    height: 300px;
+    width: min(300px, 80vw);
+    height: min(300px, 80vw);
     position: relative;
     overflow: hidden;
     border-radius: 50%;
     transform-origin: center center;
     opacity: 0;
     transition: opacity 0.5s ease;
+    margin: 0;
+    margin-top: 25vh;
 }
 
 .video-mask.visible {
     opacity: 1;
 }
 
-/* Добавляем класс для анимации */
 .video-mask.shrink {
     animation: maskShrink 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 #intro-video {
-    width: 300px;
-    height: 300px;
-    object-fit: cover;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 @keyframes maskShrink {
-    0% {
-        transform: scale(1);
-        opacity: 1;
-    }
-    100% {
-        transform: scale(0);
-        opacity: 0;
-    }
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(0); opacity: 0; }
 }
 
 #game-container {
     width: 100%;
     height: 100vh;
-    display: none; /* Изначально скрыт */
+    display: none;
     flex-direction: column;
     align-items: center;
-    padding: 2%;
     background: #f5f5f5;
     opacity: 0;
     transition: opacity 0.3s ease-in;
     position: relative;
+    overflow: hidden;
 }
 
 #top-bar {
@@ -86,10 +91,9 @@ body {
     align-items: center;
     gap: 4vw;
     margin: 2vh auto 0;
-    padding: 12px !important;
+    padding: 12px;
     position: relative;
     z-index: 10;
-    transform: scale(0.9);
     transform-origin: top center;
 }
 
@@ -102,7 +106,6 @@ body {
     border-radius: 2vh;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     width: 100%;
-    box-sizing: border-box;
 }
 
 #coins-counter {
@@ -125,10 +128,6 @@ body {
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    user-select: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     overflow: visible;
     padding-bottom: 5vh;
 }
@@ -140,11 +139,10 @@ body {
     max-height: 300px;
     margin-top: 5vh;
     background: url('assets/images/tap.png') center/contain no-repeat;
-    transform: translateY(-5%) scale(1.3);
+    transform: translateY(-15%) scale(1.3);
     transition: transform 0.05s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     z-index: 1;
-    backface-visibility: hidden;
 }
 
 #placeholder-buttons {
@@ -183,21 +181,20 @@ body {
 
 .start-button {
     position: absolute;
-    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 60px;
-    height: 60px;
+    width: min(60px, 15vw);
+    height: min(60px, 15vw);
     background: #000000;
     border: none;
     border-radius: 50%;
     cursor: pointer;
     z-index: 2001;
     transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    padding: 0;
+    user-select: none;
+    top: calc(25vh + min(150px, 40vw));
 }
 
-/* Белый треугольник внутри кнопки */
 .start-button::before {
     content: '';
     position: absolute;
@@ -212,140 +209,14 @@ body {
     transition: opacity 0.2s ease;
 }
 
-/* Состояние при анимации */
 .start-button.expanding {
-    width: 300px;
-    height: 300px;
-    background: rgba(0, 0, 0, 0);
+    width: min(300px, 80vw);
+    height: min(300px, 80vw);
+    background: rgba(0,0,0,0);
 }
 
 .start-button.expanding::before {
     opacity: 0;
-}
-
-/* Адаптация для маленьких экранов */
-@media (max-width: 600px) {
-    #coins-counter {
-        font-size: 8vw;
-    }
-    
-    #spinning-coin {
-        width: 12vw;
-        height: 12vw;
-    }
-}
-
-/* Ограничение максимального размера */
-@media (min-width: 1200px) {
-    #coins-counter {
-        font-size: 48px;
-    }
-    
-    #spinning-coin {
-        width: 45px;
-        height: 45px;
-    }
-}
-
-/* Отключаем подсветку при тапе для всех интерактивных элементов */
-#click-area,
-.start-button,
-#spinning-coin {
-    -webkit-tap-highlight-color: transparent;
-    tap-highlight-color: transparent;
-    outline: none;
-}
-
-/* Дополнительно для кнопки запуска */
-.start-button {
-    user-select: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-}
-
-/* Для области клика */
-#click-animation {
-    -webkit-touch-callout: none;
-}
-
-@media (min-width: 600px) {
-    #game-container {
-        width: 90vw;
-        height: 90vh;
-        max-width: 500px;
-        max-height: 900px;
-    }
-
-    #top-bar {
-        padding: 16px !important;
-        background: transparent;
-        box-shadow: none;
-    }
-    
-    .top-bar-content {
-        gap: 3.5vw;
-        padding: 12px 24px;
-        border-radius: 2.3vh;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    }
-
-    #coins-counter {
-        font-size: 5vh;
-    }
-
-    #spinning-coin {
-        width: 7vh;
-        height: 7vh;
-    }
-
-    #click-area {
-        margin-top: 5vh;
-        height: 60vh;
-    }
-
-    #click-animation {
-        transform: translateY(-5%) scale(1);
-        width: 60vh;
-        height: 60vh;
-        max-width: 400px;
-        max-height: 400px;
-    }
-}
-
-/* Добавляем стили для больших экранов */
-@media (min-width: 1024px) {
-    #game-container {
-        transform: scale(1.05);
-        border-radius: 2.5vh;
-    }
-
-    .top-bar-content {
-        padding: 14px 28px;
-        border-radius: 2.6vh;
-    }
-
-    #click-animation {
-        transform: translateY(-8%) scale(1);
-    }
-}
-
-/* Для очень высоких экранов */
-@media (min-height: 800px) and (min-width: 600px) {
-    #game-container {
-        transform: scale(1.1);
-    }
-}
-
-/* Для очень больших экранов */
-@media (min-width: 1600px) {
-    #game-container {
-        transform: scale(1.1);
-    }
-}
-
-#click-animation {
-    position: relative;
 }
 
 .click-mask {
@@ -361,9 +232,614 @@ body {
     z-index: 2;
 }
 
-/* Добавляем новую анимацию */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 70px;
+    z-index: 1000;
+    background: #ffffff;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+}
+
+.nav-btn {
+    background: none;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    min-width: 50px;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    outline: none;
+    user-select: none;
+}
+
+.nav-icon {
+    max-width: 40px;
+    max-height: 40px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    transition: all 0.2s ease;
+    pointer-events: none;
+}
+
+.nav-btn:active .nav-icon {
+    transform: scale(0.9);
+}
+
+.nav-bg {
+    position: absolute;
+    left: 2.5%;
+    width: 30%;
+    height: 80%;
+    background: rgba(0,0,0,0.1);
+    border-radius: 15px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    bottom: 10%;
+    z-index: 0;
+}
+
+#calendar-section {
+    display: none;
+    flex-direction: column;
+    height: 100vh;
+    padding: 20px 0;
+    background: #f5f5f5;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    transform: none;
+}
+
+.calendar-top-container {
+    width: 100%;
+    z-index: 10;
+    margin-bottom: 20px;
+    padding: 0 15px;
+}
+
+.calendar-bg {
+    background: #ffffff;
+    border-radius: 2vh;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    padding: 6px 20px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+    margin: 0 auto 5vh;
+    min-height: 50px;
+    line-height: 1.1;
+    flex-wrap: nowrap;
+    max-width: none;
+}
+
+#calendar-image {
+    width: 6vw;
+    height: 6vw;
+    min-width: 24px;
+    min-height: 24px;
+    flex-shrink: 0;
+    background: url('assets/images/timer_icon.png') center/contain no-repeat;
+    transform: translateY(-10%);
+    object-fit: contain;
+}
+
+#calendar-timer {
+    font-size: 1.3em;
+    color: #333;
+    white-space: nowrap;
+    width: auto;
+    padding: 0 8px;
+    flex-grow: 0;
+    text-align: center;
+}
+
+.calendar-image-container {
+    flex: 1;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.calendar-main-image {
+    width: 70vw;
+    height: 70vw;
+    max-width: 300px;
+    max-height: 300px;
+    background: url('assets/images/coin_bag.png') center/contain no-repeat;
+    transform: translateY(1%);
+}
+
+.calendar-bottom-container {
+    width: 100%;
+    z-index: 10;
+    margin-top: auto;
+    padding: 0 15px 80px;
+}
+
+.total-coins-counter {
+    font-size: 1.5em;
+    color: #333333;
+    text-align: center;
+    padding: 15px 0;
+}
+
 @keyframes quick-rotate {
     0% { transform: rotate(0deg); }
     50% { transform: rotate(2deg); }
     100% { transform: rotate(0deg); }
-} 
+}
+
+#click-area, .start-button, #spinning-coin {
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+}
+
+@media (max-width: 600px) {
+    #coins-counter { font-size: 8vw; }
+    #calendar-timer, .total-coins-counter {
+        font-size: 8vw;
+    }
+    #spinning-coin { width: 12vw; height: 12vw; }
+    .nav-icon { max-width: 32px; max-height: 32px; }
+    .nav-btn { min-width: 42px; min-height: 42px; }
+    .bottom-nav { height: 63px; }
+    #calendar-timer, .total-coins-counter {
+        font-size: 8vw;
+    }
+    
+    .calendar-main-image {
+        width: 80vw;
+        height: 80vw;
+        transform: translateY(2%);
+    }
+    .calendar-bottom-container .calendar-bg {
+        margin-bottom: 0 !important;
+        transform: none !important;
+        padding: 8px 16px !important;
+        position: relative;
+        top: 0;
+    }
+    #calendar-section {
+        transform: translateY(5px);
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+    .total-coins-content {
+        flex-direction: row;
+        gap: 8px;
+        width: 100%;
+        justify-content: space-between;
+    }
+    #calendar-image {
+        width: 8vw;
+        height: 8vw;
+        min-width: 20px;
+        min-height: 20px;
+    }
+    .calendar-bottom-container {
+        padding-bottom: 73px;
+    }
+}
+
+@media (max-width: 400px) {
+    #calendar-image {
+        width: 10vw;
+        height: 10vw;
+    }
+    .calendar-bottom-container .calendar-bg {
+        margin-bottom: 10vh !important;
+        transform: translateY(10px) !important;
+        padding: 6px 12px !important;
+        top: 20px;
+    }
+}
+
+@media (min-width: 600px) {
+    #game-container {
+        width: 90vw;
+        height: 90vh;
+        max-width: 500px;
+        max-height: 900px;
+    }
+    #top-bar {
+        padding: 16px;
+        background: transparent;
+        box-shadow: none;
+    }
+    .top-bar-content {
+        gap: 3.5vw;
+        padding: 12px 24px;
+        border-radius: 2.3vh;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    #coins-counter { 
+        font-size: 5vh; 
+        transform: scale(0.98); 
+    }
+    #spinning-coin { width: 7vh; height: 7vh; }
+    #click-area { margin-top: 5vh; height: 60vh; }
+    #click-animation {
+        transform: translateY(-15%) scale(1);
+        width: 60vh;
+        height: 60vh;
+        max-width: 400px;
+        max-height: 400px;
+    }
+    #calendar-section {
+        width: 90vw;
+        height: 90vh;
+        max-width: 500px;
+        max-height: 900px;
+        margin: 0 auto;
+        border-radius: 2.5vh;
+        position: relative;
+    }
+    
+    .calendar-bg {
+        padding: 10px 20px;
+        line-height: 1.3;
+    }
+    
+    #calendar-timer, .total-coins-counter {
+        font-size: 5vh;
+        transform: scale(1.02);
+    }
+    
+    .calendar-main-image {
+        transform: translateY(1%);
+        max-width: 400px;
+        max-height: 400px;
+    }
+    .total-coins-content {
+        flex-direction: row;
+        gap: 15px;
+    }
+    .calendar-bottom-container {
+        padding-bottom: 90px;
+    }
+}
+
+@media (min-width: 1024px) {
+    #game-container { transform: scale(1.05); border-radius: 2.5vh; }
+    .top-bar-content { padding: 14px 28px; border-radius: 2.6vh; }
+    #click-animation { transform: translateY(-18%) scale(1); }
+}
+
+@media (min-height: 800px) and (min-width: 600px),
+       (min-width: 1600px) {
+    #game-container { transform: scale(1.1); }
+}
+
+@media (min-width: 1200px) {
+    #coins-counter { font-size: 48px; }
+    #spinning-coin { width: 45px; height: 45px; }
+    #calendar-timer {
+        font-size: 36px;
+    }
+    #calendar-image {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+.timer-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0;
+    width: max-content;
+    margin: 0 auto;
+}
+
+.total-coins-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.coins-label {
+    font-size: 1.2em;
+    color: #666;
+}
+
+@media (max-width: 450px) {
+    .calendar-bg {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+    }
+    
+    .total-coins-content {
+        flex-direction: row;
+        gap: 8px;
+        width: 100%;
+        justify-content: space-between;
+    }
+}
+
+/* Восстанавливаем оригинальное поведение для нижнего calendar-bg */
+.calendar-bottom-container .calendar-bg {
+    max-width: 80% !important; /* Фиксируем максимальную ширину */
+    width: auto !important; /* Возвращаем автоматическую ширину */
+    flex-direction: row; /* Горизонтальное расположение по умолчанию */
+    flex-wrap: nowrap; /* Запрещаем перенос */
+    justify-content: space-between; /* Распределение пространства */
+    padding: 10px 20px !important; /* Восстанавливаем оригинальный padding */
+}
+
+/* Стили для переноса при недостатке места */
+.calendar-bottom-container .total-coins-content {
+    display: flex;
+    flex-wrap: wrap; /* Разрешаем перенос */
+    justify-content: center; /* Центрирование по горизонтали */
+    gap: 8px;
+    width: 100%;
+}
+
+/* Вертикальное расположение при переносе */
+.calendar-bottom-container .total-coins-content:has(span:nth-child(2)) {
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Горизонтальное расположение когда помещается */
+.calendar-bottom-container .total-coins-content:not(:has(span:nth-child(2))) {
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+/* Сохраняем стили для верхнего контейнера с таймером */
+.calendar-top-container .calendar-bg {
+    width: fit-content !important;
+    max-width: none !important;
+    margin: 0 auto !important;
+}
+
+/* Стили для лидерборда */
+#leaderboard-section {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+    background: #f5f5f5;
+}
+
+.leaderboard-header {
+    padding: 20px 20px 0;
+    width: 100%;
+}
+
+.leaderboard-banner-container {
+    width: 100%;
+    padding-top: 0;
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.leaderboard-banner {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16/9;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.leaderboard-list-container {
+    flex: 1;
+    overflow-y: auto;
+    margin-top: 20px;
+    margin-bottom: 70px;
+    padding: 10px 20px;
+}
+
+.leaderboard-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.player-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    margin-bottom: 8px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    margin-top: 2px;
+    margin-left: 1px;
+    margin-right: 1px;
+}
+
+.player-position {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f0f0f0;
+    border-radius: 50%;
+    margin-right: 12px;
+    font-weight: bold;
+    color: #333;
+    flex-shrink: 0;
+}
+
+.player-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 17px;
+    flex-shrink: 0;
+}
+
+.player-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.player-info {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.player-name {
+    font-weight: 500;
+    font-size: 16px;
+    color: #333;
+    max-width: 60%;
+    white-space: nowrap;
+    overflow: hidden;
+    position: relative;
+    padding-right: 20px;
+}
+
+.player-name::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 30px;
+    background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
+}
+
+@supports (-webkit-mask-image: linear-gradient(90deg, transparent, #fff)) {
+    .player-name {
+        -webkit-mask-image: linear-gradient(90deg, 
+            rgba(0,0,0,1) 0%, 
+            rgba(0,0,0,1) calc(100% - 30px), 
+            rgba(0,0,0,0) 100%
+        );
+        mask-image: linear-gradient(90deg, 
+            rgba(0,0,0,1) 0%, 
+            rgba(0,0,0,1) calc(100% - 30px), 
+            rgba(0,0,0,0) 100%
+        );
+    }
+    .player-name::after {
+        display: none;
+    }
+}
+
+.player-coins {
+    font-weight: 700;
+    color: #4a4a4a;
+    font-size: 16px;
+}
+
+/* Медиа-запросы для больших экранов */
+@media (min-width: 768px) {
+    .leaderboard-banner-container {
+        height: 200px; /* Фиксированная высота для больших экранов */
+    }
+    
+    .leaderboard-banner {
+        height: 100%;
+        width: 100%;
+        aspect-ratio: auto;
+        object-fit: cover;
+    }
+    
+    .player-avatar {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .player-position {
+        width: 36px;
+        height: 36px;
+        font-size: 18px;
+    }
+    
+    .player-name, .player-coins {
+        font-size: 18px;
+    }
+}
+
+/* Убедимся, что навигация остается зафиксированной при прокрутке */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+.intro-bottom-image {
+    width: 70%;
+    height: auto;
+    aspect-ratio: 16/9;
+    object-fit: contain;
+    cursor: pointer;
+    animation: pulse 2s infinite ease-in-out;
+    transition: transform 0.3s ease;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.intro-bottom-image:active {
+    transform: scale(0.95);
+}
+
+.intro-bottom-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: auto;
+    margin-bottom: 10vh;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.intro-bottom-container.visible {
+    opacity: 1;
+}
+
+/* Добавляем медиа-запрос для очень узких экранов */
+@media (max-aspect-ratio: 2/3) {
+    #intro-video-container {
+        padding: 0 20px;
+    }
+
+    .video-mask {
+        margin-top: 20vh;
+    }
+
+    .start-button {
+        top: calc(20vh + min(150px, 40vw));
+    }
+}
