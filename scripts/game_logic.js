@@ -1,3 +1,9 @@
+const isWebView = window.Telegram && window.Telegram.WebApp;
+const platform = isWebView ? window.Telegram.WebApp.platform : 'web';
+
+// Добавьте определение платформы
+document.body.setAttribute('data-platform', platform);
+
 let tg = window.Telegram.WebApp;
 let coins = 0;
 let isAnimating = false;
@@ -70,6 +76,15 @@ function handleIntroVideo() {
 
 // Инициализация при загрузке
 document.addEventListener('DOMContentLoaded', async () => {
+    // Инициализация Telegram WebApp
+    if (window.Telegram.WebApp) {
+        window.Telegram.WebApp.ready();
+        window.Telegram.WebApp.expand(); // Расширяем на весь экран
+        
+        // Устанавливаем правильную тему
+        document.body.classList.add(window.Telegram.WebApp.colorScheme);
+    }
+    
     // Проверяем и устанавливаем начальное отображение секций
     const gameContainer = document.getElementById('game-container');
     const calendarSection = document.getElementById('calendar-section');

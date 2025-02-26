@@ -6,6 +6,9 @@
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
 }
 
 html {
@@ -17,9 +20,12 @@ body {
     background: #ffffff;
     color: #333333;
     height: 100vh;
+    height: -webkit-fill-available;
+    height: fill-available;
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow: hidden;
 }
 
 #intro-video-container {
@@ -76,8 +82,11 @@ body {
 #game-container {
     width: 100%;
     height: 100vh;
+    height: -webkit-fill-available;
+    height: fill-available;
     display: none;
     flex-direction: column;
+    justify-content: space-between;
     align-items: center;
     background: #f5f5f5;
     opacity: 0;
@@ -123,13 +132,12 @@ body {
 #click-area {
     flex: 1;
     width: 100%;
-    height: 80vh;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
     overflow: visible;
-    padding-bottom: 5vh;
+    padding-top: 20vh;
 }
 
 #click-animation {
@@ -137,12 +145,11 @@ body {
     height: 70vw;
     max-width: 300px;
     max-height: 300px;
-    margin-top: 5vh;
     background: url('assets/images/tap.png') center/contain no-repeat;
-    transform: translateY(-15%) scale(1.3);
-    transition: transform 0.05s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     z-index: 1;
+    transform: translateY(-15%) scale(1.3);
+    transition: transform 0.05s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 #placeholder-buttons {
@@ -235,8 +242,10 @@ body {
 .bottom-nav {
     position: fixed;
     bottom: 0;
+    bottom: env(safe-area-inset-bottom);
     left: 0;
     right: 0;
+    padding-bottom: env(safe-area-inset-bottom);
     height: 70px;
     z-index: 1000;
     background: #ffffff;
@@ -259,6 +268,9 @@ body {
     justify-content: center;
     outline: none;
     user-select: none;
+    touch-action: manipulation;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .nav-icon {
@@ -291,6 +303,8 @@ body {
     display: none;
     flex-direction: column;
     height: 100vh;
+    height: -webkit-fill-available;
+    height: fill-available;
     padding: 20px 0;
     background: #f5f5f5;
     position: absolute;
@@ -370,6 +384,7 @@ body {
     z-index: 10;
     margin-top: auto;
     padding: 0 15px 80px;
+    margin-bottom: calc(70px + env(safe-area-inset-bottom));
 }
 
 .total-coins-counter {
@@ -473,7 +488,7 @@ body {
         transform: scale(0.98); 
     }
     #spinning-coin { width: 7vh; height: 7vh; }
-    #click-area { margin-top: 5vh; height: 60vh; }
+    #click-area { padding-top: 15vh; }
     #click-animation {
         transform: translateY(-15%) scale(1);
         width: 60vh;
@@ -616,7 +631,9 @@ body {
 #leaderboard-section {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    height: 100vh;
+    height: -webkit-fill-available;
+    height: fill-available;
     width: 100%;
     position: absolute;
     top: 0;
@@ -652,7 +669,7 @@ body {
     flex: 1;
     overflow-y: auto;
     margin-top: 20px;
-    margin-bottom: 70px;
+    margin-bottom: calc(70px + env(safe-area-inset-bottom));
     padding: 10px 20px;
 }
 
@@ -673,6 +690,9 @@ body {
     margin-top: 2px;
     margin-left: 1px;
     margin-right: 1px;
+    touch-action: manipulation;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .player-position {
@@ -842,4 +862,18 @@ body {
     .start-button {
         top: calc(20vh + min(150px, 40vw));
     }
+}
+
+/* Специфичные стили для WebView */
+[data-platform="webview-android"],
+[data-platform="webview-ios"] {
+    /* Специфичные настройки для WebView */
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: none;
+}
+
+/* Исправление скролла для WebView */
+.leaderboard-list-container {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
 }
