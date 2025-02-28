@@ -846,13 +846,29 @@ body {
         height: 70px;
         /* Добавляем отступ снизу равный safe-area */
         padding-bottom: env(safe-area-inset-bottom, 20px);
-        /* Смещаем навигацию вверх на величину safe-area */
-        transform: translateY(calc(-1 * env(safe-area-inset-bottom, 0px)));
+    }
+
+    /* Создаем контейнер для содержимого навигации */
+    .bottom-nav::after {
+        content: '';
+        position: absolute;
+        bottom: env(safe-area-inset-bottom, 20px);
+        left: 0;
+        right: 0;
+        height: 70px;
+        background: #ffffff;
+        z-index: -1;
+    }
+
+    /* Приподнимаем все содержимое навигации */
+    .nav-btn {
+        transform: translateY(-15px);
     }
 
     .nav-bg {
-        /* Увеличиваем высоту фона */
-        height: calc(80% + env(safe-area-inset-bottom, 0px));
+        /* Увеличиваем высоту фона и приподнимаем его */
+        height: 80%;
+        transform: translateY(-15px);
     }
 }
 
