@@ -841,34 +841,9 @@ body {
        screen and (device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3),
        screen and (device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3),
        screen and (device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) {
-    .bottom-nav {
-        /* Фиксированная высота для навигации */
-        height: 70px;
-        /* Добавляем отступ снизу равный safe-area */
-        padding-bottom: env(safe-area-inset-bottom, 20px);
-    }
-
-    /* Создаем контейнер для содержимого навигации */
-    .bottom-nav::after {
-        content: '';
-        position: absolute;
-        bottom: env(safe-area-inset-bottom, 20px);
-        left: 0;
-        right: 0;
-        height: 70px;
-        background: #ffffff;
-        z-index: -1;
-    }
-
-    /* Приподнимаем все содержимое навигации */
-    .nav-btn {
-        transform: translateY(-15px);
-    }
-
-    .nav-bg {
-        /* Увеличиваем высоту фона и приподнимаем его */
-        height: 80%;
-        transform: translateY(-15px);
+    .bottom-nav > * {
+        /* Приподнимаем содержимое навигации */
+        transform: translateY(-8px);
     }
 }
 
