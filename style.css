@@ -810,13 +810,50 @@ body {
     }
 }
 
-/* Убедимся, что навигация остается зафиксированной при прокрутке */
-.bottom-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 1000;
+/* Специальные стили только для iOS устройств */
+@supports (-webkit-touch-callout: none) {
+    .bottom-nav {
+        /* Увеличиваем высоту на величину safe-area */
+        height: 70px;
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+        /* Важно: добавляем margin чтобы компенсировать padding */
+        margin-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    /* Контейнеры с прокруткой */
+    .leaderboard-list-container,
+    .calendar-bottom-container {
+        /* Увеличиваем отступ снизу */
+        margin-bottom: calc(70px + env(safe-area-inset-bottom, 0px));
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    /* Основные контейнеры */
+    #game-container,
+    #calendar-section,
+    #leaderboard-section {
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+}
+
+/* Специальные стили для iPhone с челкой */
+@media screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3),
+       screen and (device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3),
+       screen and (device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3),
+       screen and (device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) {
+    .bottom-nav {
+        /* Фиксированная высота для навигации */
+        height: 70px;
+        /* Добавляем отступ снизу равный safe-area */
+        padding-bottom: env(safe-area-inset-bottom, 20px);
+        /* Смещаем навигацию вверх на величину safe-area */
+        transform: translateY(calc(-1 * env(safe-area-inset-bottom, 0px)));
+    }
+
+    .nav-bg {
+        /* Увеличиваем высоту фона */
+        height: calc(80% + env(safe-area-inset-bottom, 0px));
+    }
 }
 
 .intro-bottom-image {
@@ -897,55 +934,4 @@ body {
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
-}
-
-/* Добавляем специальные стили для iOS */
-@supports (-webkit-touch-callout: none) {
-    .bottom-nav {
-        /* Убираем margin и padding, используем только height */
-        height: calc(70px + env(safe-area-inset-bottom));
-        padding-top: 0;
-        padding-bottom: 0;
-    }
-
-    /* Оборачиваем содержимое nav-btn в контейнер */
-    .nav-btn {
-        height: 70px; /* Фиксированная высота как у bottom-nav */
-        padding: 0;
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    /* Перемещаем фоновый индикатор выше */
-    .nav-bg {
-        bottom: auto;
-        top: 50%;
-        transform: translateY(-50%);
-        height: 70%;
-    }
-
-    /* Корректируем отступы для контента */
-    .leaderboard-list-container,
-    .calendar-bottom-container {
-        margin-bottom: calc(70px + env(safe-area-inset-bottom));
-    }
-
-    #game-container,
-    #calendar-section,
-    #leaderboard-section {
-        padding-bottom: env(safe-area-inset-bottom);
-    }
-}
-
-/* Специфичные стили для iPhone с челкой */
-@media screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3),
-       screen and (device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3),
-       screen and (device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3),
-       screen and (device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) {
-    .bottom-nav {
-        /* Гарантируем, что навигация не перекрывается с home indicator */
-        height: calc(70px + env(safe-area-inset-bottom));
-    }
 }
