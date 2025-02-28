@@ -245,6 +245,7 @@ body {
     z-index: 2;
 }
 
+/* Оригинальные стили для всех устройств */
 .bottom-nav {
     position: fixed;
     bottom: 0;
@@ -262,19 +263,16 @@ body {
 .nav-btn {
     background: none;
     border: none;
-    padding: 8px;
+    padding: 12px;
     cursor: pointer;
     transition: transform 0.2s ease;
     min-width: 50px;
-    min-height: 50px;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    outline: none;
-    user-select: none;
-    touch-action: manipulation;
-    -webkit-touch-callout: none;
-    -webkit-tap-highlight-color: transparent;
+    position: relative;
+    z-index: 1;
 }
 
 .nav-icon {
@@ -810,50 +808,13 @@ body {
     }
 }
 
-/* Специальные стили только для iOS устройств */
-@supports (-webkit-touch-callout: none) {
-    .bottom-nav {
-        /* Увеличиваем высоту на величину safe-area */
-        height: 70px;
-        padding-bottom: env(safe-area-inset-bottom, 0px);
-        /* Важно: добавляем margin чтобы компенсировать padding */
-        margin-bottom: env(safe-area-inset-bottom, 0px);
-    }
-
-    /* Контейнеры с прокруткой */
-    .leaderboard-list-container,
-    .calendar-bottom-container {
-        /* Увеличиваем отступ снизу */
-        margin-bottom: calc(70px + env(safe-area-inset-bottom, 0px));
-        padding-bottom: env(safe-area-inset-bottom, 0px);
-    }
-
-    /* Основные контейнеры */
-    #game-container,
-    #calendar-section,
-    #leaderboard-section {
-        padding-bottom: env(safe-area-inset-bottom, 0px);
-    }
-}
-
-/* Специальные стили для iPhone с челкой */
-@media screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3),
-       screen and (device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3),
-       screen and (device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3),
-       screen and (device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) {
-    .bottom-nav {
-        /* Фиксированная высота для навигации */
-        height: 70px;
-        /* Добавляем отступ снизу равный safe-area */
-        padding-bottom: env(safe-area-inset-bottom, 20px);
-        /* Смещаем навигацию вверх на величину safe-area */
-        transform: translateY(calc(-1 * env(safe-area-inset-bottom, 0px)));
-    }
-
-    .nav-bg {
-        /* Увеличиваем высоту фона */
-        height: calc(80% + env(safe-area-inset-bottom, 0px));
-    }
+/* Убедимся, что навигация остается зафиксированной при прокрутке */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
 }
 
 .intro-bottom-image {
@@ -934,4 +895,76 @@ body {
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
+}
+
+/* Добавляем специальные стили для iOS */
+@supports (-webkit-touch-callout: none) {
+    /* iOS-specific styles */
+    .bottom-nav {
+        height: calc(70px + max(env(safe-area-inset-bottom, 20px), 20px));
+    }
+    
+    .nav-btn {
+        padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
+    }
+    
+    #game-container,
+    #calendar-section,
+    #leaderboard-section {
+        /* Учитываем высоту нижней навигации */
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+}
+
+/* Медиа-запрос для iPhone с челкой */
+@media screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3),
+       screen and (device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3),
+       screen and (device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3),
+       screen and (device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) {
+    .bottom-nav {
+        padding-bottom: max(env(safe-area-inset-bottom, 20px), 20px);
+    }
+    
+    .nav-btn {
+        margin-bottom: env(safe-area-inset-bottom, 0px);
+    }
+}
+
+/* Специфичные исправления ТОЛЬКО для iOS с поддержкой safe-area */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+    .bottom-nav {
+        padding-bottom: env(safe-area-inset-bottom);
+        height: calc(70px + env(safe-area-inset-bottom));
+    }
+    
+    /* Вертикальное выравнивание для иконок */
+    .nav-btn {
+        margin-bottom: env(safe-area-inset-bottom);
+        transform: translateY(calc(-1 * env(safe-area-inset-bottom)/2));
+    }
+    
+    /* Фикс для iPhone 14/15 Pro Max */
+    @media (device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) {
+        .bottom-nav {
+            padding-bottom: 34px;
+        }
+        .nav-btn {
+            margin-bottom: 34px;
+        }
+    }
+}
+
+/* Фикс для контента под навигацией */
+#game-container,
+#calendar-section,
+#leaderboard-section {
+    padding-bottom: 70px;
+}
+
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+    #game-container,
+    #calendar-section,
+    #leaderboard-section {
+        padding-bottom: calc(70px + env(safe-area-inset-bottom));
+    }
 }
