@@ -260,11 +260,18 @@ body {
     box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
 }
 
-/* Добавляем поддержку безопасных зон для iOS, используя env(safe-area-inset-bottom) */
+/* Добавляем поддержку безопасных зон для iOS:
+   Вместо увеличения высоты панели, добавляем псевдоэлемент,
+   который визуально расширяет фон вниз, а кнопки остаются на высоте 70px */
 @supports(padding: max(env(safe-area-inset-bottom), 0px)) {
-    .bottom-nav {
-         padding-bottom: env(safe-area-inset-bottom);
-         height: calc(70px + env(safe-area-inset-bottom));
+    .bottom-nav::after {
+         content: "";
+         position: absolute;
+         left: 0;
+         right: 0;
+         bottom: -env(safe-area-inset-bottom);
+         height: env(safe-area-inset-bottom);
+         background: inherit;
     }
 }
 
