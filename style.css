@@ -842,9 +842,12 @@ body {
        screen and (device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3),
        screen and (device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) {
     .bottom-nav {
-        padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
-        height: calc(70px + env(safe-area-inset-bottom, 0px));
-
+        /* Фиксированная высота для навигации */
+        height: 70px;
+        /* Добавляем отступ снизу равный safe-area */
+        padding-bottom: env(safe-area-inset-bottom, 25px);
+        /* Смещаем навигацию вверх на величину safe-area */
+        transform: translateY(calc(-1 * env(safe-area-inset-bottom, 0px)));
     }
 
     .nav-bg {
