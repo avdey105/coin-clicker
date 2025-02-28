@@ -217,27 +217,6 @@ function updateCoinsDisplay() {
     document.getElementById('coins-amount').textContent = coins;
 }
 
-// Обновляем стили анимации
-const style = document.createElement('style');
-style.textContent = `
-@keyframes coin-pop {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.2); }
-    100% { transform: scale(1); }
-}
-
-@keyframes fadeOut {
-    from { opacity: 1; }
-    to { opacity: 0; }
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-`;
-document.head.appendChild(style);
-
 // Добавляем обработчики
 document.querySelectorAll('.nav-btn').forEach(btn => {
     btn.addEventListener('click', function() {
