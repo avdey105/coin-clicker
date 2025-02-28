@@ -845,7 +845,7 @@ body {
         /* Фиксированная высота для навигации */
         height: 70px;
         /* Добавляем отступ снизу равный safe-area */
-        padding-bottom: env(safe-area-inset-bottom, 25px);
+        padding-bottom: env(safe-area-inset-bottom, 20px);
         /* Смещаем навигацию вверх на величину safe-area */
         transform: translateY(calc(-1 * env(safe-area-inset-bottom, 0px)));
     }
