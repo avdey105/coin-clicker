@@ -248,6 +248,7 @@ body {
 .bottom-nav {
     position: fixed;
     bottom: 0;
+    bottom: env(safe-area-inset-bottom);
     left: 0;
     right: 0;
     padding-bottom: env(safe-area-inset-bottom);
@@ -899,22 +900,27 @@ body {
     to { opacity: 1; }
 }
 
-/* Добавляем специфичные стили для iOS */
+/* Добавляем специальные стили для iOS */
 @supports (padding: max(0px)) {
     .bottom-nav {
-        height: max(70px, calc(70px + env(safe-area-inset-bottom)));
-        padding-bottom: env(safe-area-inset-bottom, 0px);
+        padding-bottom: max(env(safe-area-inset-bottom), 5px);
+        height: calc(70px + env(safe-area-inset-bottom));
     }
 
     /* Корректируем отступ для контейнеров с контентом */
     .leaderboard-list-container,
     .calendar-bottom-container {
-        margin-bottom: max(70px, calc(70px + env(safe-area-inset-bottom)));
+        margin-bottom: calc(70px + max(env(safe-area-inset-bottom), 5px));
     }
 }
 
-/* Корректируем позиционирование кнопок для iOS */
-[data-platform="webview-ios"] .nav-btn {
-    margin-bottom: env(safe-area-inset-bottom, 0px);
-    transform: translateY(calc(-1 * env(safe-area-inset-bottom) / 2));
+/* Специальные стили только для iOS WebView */
+[data-platform="webview-ios"] .bottom-nav {
+    padding-bottom: max(env(safe-area-inset-bottom), 5px);
+    height: calc(70px + env(safe-area-inset-bottom));
+}
+
+[data-platform="webview-ios"] .leaderboard-list-container,
+[data-platform="webview-ios"] .calendar-bottom-container {
+    margin-bottom: calc(70px + max(env(safe-area-inset-bottom), 5px));
 }
