@@ -900,20 +900,30 @@ body {
     to { opacity: 1; }
 }
 
-/* Добавляем стили для айфонов, чтобы корректировать нижнюю панель навигации */
+/* Добавляем базовое правило для нового контейнера */
+.iphone-safe-area {
+    display: none;
+}
+
+/* Специфичные стили для айфонов */
 @media screen and (max-device-width: 812px) and (-webkit-touch-callout: none) {
     .bottom-nav {
         bottom: 10px;       /* Поднимаем панель на 10px */
         padding-bottom: 0;   /* Отключаем отступ, заданный через env() */
     }
+    /* Отключаем старый псевдоэлемент */
     body::after {
-        content: "";
+        display: none;
+    }
+    /* Стили для нового контейнера безопасной зоны */
+    .iphone-safe-area {
+        display: block;
         position: fixed;
         left: 0;
         right: 0;
         bottom: 0;
-        height: 10px;        /* Пустой белый контейнер высотой 10px */
-        background: #ffffff;
-        z-index: 999;        /* Размещаем ниже панели (.bottom-nav имеет z-index: 1000) */
+        height: 10px;        /* Высота безопасного отступа */
+        background: #ffffff; /* Белый фон */
+        z-index: 999;        /* Размещаем ниже панели, если необходимо */
     }
 }
