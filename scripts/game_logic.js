@@ -4,6 +4,12 @@ const platform = isWebView ? window.Telegram.WebApp.platform : 'web';
 // Добавьте определение платформы
 document.body.setAttribute('data-platform', platform);
 
+// В начале файла, где объявлены другие константы
+const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+// Добавляем класс к body в зависимости от платформы
+document.body.classList.add(isIOS ? 'ios' : 'other-platform');
+
 let tg = window.Telegram.WebApp;
 let coins = 0;
 let isAnimating = false;
