@@ -260,8 +260,6 @@ body {
     justify-content: space-around;
     align-items: center;
     box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-    padding-bottom: calc(env(safe-area-inset-bottom) + 10px);
-    align-items: center;
 }
 
 .nav-btn {
@@ -943,7 +941,7 @@ body {
 /* Добавляем специальные стили для iOS платформы в Telegram WebApp */
 [data-platform="ios"] .bottom-nav {
     /* Дополнительный отступ для iOS */
-    bottom: calc(env(safe-area-inset-bottom) + 10px);
+    bottom: env(safe-area-inset-bottom);
 }
 
 /* Создаем белую область под навигацией для iOS-устройств */
@@ -953,7 +951,54 @@ body {
     bottom: 0;
     left: 0;
     right: 0;
-    height: calc(env(safe-area-inset-bottom) + 20px);
+    height: calc(env(safe-area-inset-bottom) + 70px); /* Увеличиваем высоту, чтобы покрыть всю область под панелью */
     background-color: #ffffff;
-    z-index: 999;
+    z-index: 998; /* Ставим z-index ниже, чем у навигации, но выше, чем у остального контента */
+}
+
+[data-platform="ios"] .nav-btn {
+    /* Улучшаем центрирование иконок для iOS */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 0;
+    padding-top: 0;
+    height: 100%;
+}
+
+[data-platform="ios"] .nav-icon {
+    /* Корректируем размер и позицию иконок для iOS */
+    position: relative;
+    top: -2px; /* Небольшой сдвиг вверх для визуального центрирования */
+}
+
+/* Корректируем игровую область для iOS */
+[data-platform="ios"] #game-container {
+    padding-bottom: 70px; /* Добавляем отступ снизу, чтобы контент не уходил под навигацию */
+}
+
+/* Корректируем вращающийся фон для iOS */
+[data-platform="ios"] .rotating-background {
+    bottom: 70px; /* Поднимаем фон, чтобы он не выходил за пределы навигационной панели */
+}
+
+/* Дополнительные стили для iOS */
+@supports (-webkit-touch-callout: none) {
+    /* Только для iOS устройств */
+    body {
+        /* Убедимся, что контент не выходит за пределы экрана */
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+    
+    /* Убедимся, что белая область под навигацией отображается корректно */
+    [data-platform="ios"] .bottom-nav::after {
+        content: "";
+        position: absolute;
+        bottom: -70px; /* Отрицательное значение высоты навигационной панели */
+        left: 0;
+        right: 0;
+        height: 70px;
+        background-color: #ffffff;
+        z-index: -1;
+    }
 }
