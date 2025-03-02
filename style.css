@@ -88,9 +88,9 @@ body {
     display: none;
     flex-direction: column;
     align-items: center;
-    background: #f5f5f5;
+    background: url('assets/images/background.png') center/cover no-repeat fixed;
     opacity: 0;
-    transition: opacity 0.3s ease-in;
+    transition: opacity 0.15s ease-in;
     position: absolute;
     top: 0;
     left: 0;
@@ -144,6 +144,7 @@ body {
     overflow: visible;
     transform: translateY(2vh);
     padding-bottom: 5vh;
+    position: relative;
 }
 
 #click-animation {
@@ -248,30 +249,17 @@ body {
 .bottom-nav {
     position: fixed;
     bottom: 0;
+    bottom: env(safe-area-inset-bottom);
     left: 0;
     right: 0;
-    padding-bottom: calc(env(safe-area-inset-bottom) + 5px);
-    height: auto;
-    min-height: 70px;
+    padding-bottom: env(safe-area-inset-bottom);
+    height: 70px;
     z-index: 1000;
     background: #ffffff;
     display: flex;
     justify-content: space-around;
     align-items: center;
     box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-    box-sizing: content-box;
-    -webkit-overflow-scrolling: touch;
-}
-
-.bottom-nav::after {
-    content: '';
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    height: env(safe-area-inset-bottom);
-    background: inherit;
-    z-index: -1;
 }
 
 .nav-btn {
@@ -313,7 +301,7 @@ body {
     height: 80%;
     background: rgba(0,0,0,0.1);
     border-radius: 15px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
     bottom: 10%;
     z-index: 0;
 }
@@ -325,7 +313,7 @@ body {
     height: -webkit-fill-available;
     height: fill-available;
     padding: 20px 0;
-    background: #f5f5f5;
+    background: url('assets/images/background.png') center/cover no-repeat fixed;
     position: absolute;
     top: 0;
     left: 0;
@@ -333,11 +321,13 @@ body {
     bottom: 0;
     width: 100%;
     transform: none;
+    transition: opacity 0.15s ease-in;
 }
 
 .calendar-top-container {
     width: 100%;
     z-index: 10;
+    margin-top: 5px;
     margin-bottom: 20px;
     padding: 0 15px;
 }
@@ -387,6 +377,7 @@ body {
     justify-content: center;
     align-items: center;
     margin: 20px 0;
+    margin-top: 25px;
 }
 
 .calendar-main-image {
@@ -396,12 +387,25 @@ body {
     max-height: 300px;
     background: url('assets/images/coin_bag.png') center/contain no-repeat;
     transform: translateY(1%);
+    animation: floatUpDown 4s ease-in-out infinite;
+}
+
+@keyframes floatUpDown {
+    0% {
+        transform: translateY(1%);
+    }
+    50% {
+        transform: translateY(-1%);
+    }
+    100% {
+        transform: translateY(1%);
+    }
 }
 
 .calendar-bottom-container {
     width: 100%;
     z-index: 10;
-    margin-top: auto;
+    margin-top: calc(5px + auto);
     padding: 0 15px 80px;
     margin-bottom: calc(70px + env(safe-area-inset-bottom));
 }
@@ -450,7 +454,6 @@ body {
         top: 0;
     }
     #calendar-section {
-        transform: translateY(5px);
         padding-top: 20px;
         padding-bottom: 20px;
     }
@@ -661,6 +664,7 @@ body {
     bottom: 0;
     overflow: hidden;
     background: #f5f5f5;
+    transition: opacity 0.15s ease-in;
 }
 
 .leaderboard-header {
@@ -911,4 +915,26 @@ body {
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
+}
+
+.rotating-background {
+    position: absolute;
+    width: 840vw;
+    height: 840vw;
+    max-width: 3600px;
+    max-height: 3600px;
+    background: url('assets/images/rotating-bg.png') center/contain no-repeat;
+    animation: rotate 40s linear infinite;
+    z-index: 0;
+    transform: translateY(-7vh);
+    opacity: 0.9;
+}
+
+@keyframes rotate {
+    from {
+        transform: translateY(-7vh) rotate(0deg);
+    }
+    to {
+        transform: translateY(-7vh) rotate(360deg);
+    }
 }

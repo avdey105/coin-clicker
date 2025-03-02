@@ -14,6 +14,7 @@ let currentAnimation = null;
 let currentSection = 'clicker';
 let timerSeconds = 0; // Общее время в секундах
 let totalCoins = 0;   // Общее количество монет
+let nextFartClick = Math.floor(Math.random() * 66);
 
 // Функция для обработки видео-интро
 function handleIntroVideo() {
@@ -163,10 +164,21 @@ document.getElementById('click-area').addEventListener('click', async () => {
     coins++;
     updateCoinsDisplay();
     
-    // Проигрывание звука
-    const sound = document.getElementById('tap-sound');
-    sound.currentTime = 0;
-    sound.play();
+    // Проверяем, является ли текущий клик моментом для звука пердежа
+    if (coins === nextFartClick) {
+        // Проигрываем звук пердежа
+        const fartSound = document.getElementById('fart-sound');
+        fartSound.currentTime = 0;
+        fartSound.play();
+        
+        // Устанавливаем следующий случайный момент для звука пердежа
+        nextFartClick = coins + Math.floor(Math.random() * 66);
+    } else {
+        // Проигрывание обычного звука клика
+        const sound = document.getElementById('tap-sound');
+        sound.currentTime = 0;
+        sound.play();
+    }
     
     // Сохранение прогресса
     try {
@@ -232,14 +244,67 @@ document.querySelectorAll('.nav-btn').forEach(btn => {
         const calendarSection = document.getElementById('calendar-section');
         const leaderboardSection = document.getElementById('leaderboard-section');
         
-        gameContainer.style.display = section === 'clicker' ? 'flex' : 'none';
-        gameContainer.style.opacity = section === 'clicker' ? '1' : '0';
+        // Функция для плавного перехода
+        const fadeSection = (from, to) => {
+            // Проверяем, происходит ли переход между кликером и календарем
+            const isBackgroundTransition = 
+                (currentSection === 'clicker' && section === 'calendar') ||
+                (currentSection === 'calendar' && section === 'clicker');
+
+            const ANIMATION_DURATION = 150;
+
+            // Сначала скрываем текущую секцию
+            if (isBackgroundTransition) {
+                // Плавно скрываем только содержимое
+                const fromContent = Array.from(from.children);
+                fromContent.forEach(el => {
+                    el.style.transition = `opacity ${ANIMATION_DURATION}ms ease-out`;
+                    el.style.opacity = '0';
+                });
+            } else {
+                from.style.opacity = '0';
+            }
+
+            // Переключаем отображение через таймаут
+            setTimeout(() => {
+                from.style.display = 'none';
+                to.style.display = 'flex';
+                
+                // Форсируем перерисовку
+                void to.offsetWidth;
+
+                if (isBackgroundTransition) {
+                    to.style.opacity = '1';
+                    // Показываем содержимое новой секции
+                    const toContent = Array.from(to.children);
+                    toContent.forEach(el => {
+                        el.style.transition = `opacity ${ANIMATION_DURATION}ms ease-in`;
+                        el.style.opacity = '1';
+                    });
+                } else {
+                    // Показываем новую секцию целиком
+                    to.style.opacity = '1';
+                    // Убеждаемся, что все дочерние элементы видимы
+                    Array.from(to.children).forEach(el => {
+                        el.style.opacity = '1';
+                    });
+                }
+            }, ANIMATION_DURATION);
+        };
         
-        calendarSection.style.display = section === 'calendar' ? 'flex' : 'none';
-        calendarSection.style.opacity = section === 'calendar' ? '1' : '0';
+        // Определяем текущую и целевую секции
+        const currentElement = 
+            currentSection === 'clicker' ? gameContainer :
+            currentSection === 'calendar' ? calendarSection :
+            leaderboardSection;
+            
+        const targetElement = 
+            section === 'clicker' ? gameContainer :
+            section === 'calendar' ? calendarSection :
+            leaderboardSection;
         
-        leaderboardSection.style.display = section === 'leaderboard' ? 'flex' : 'none';
-        leaderboardSection.style.opacity = section === 'leaderboard' ? '1' : '0';
+        // Выполняем переход
+        fadeSection(currentElement, targetElement);
         
         currentSection = section;
         updateNavBackground(this);
