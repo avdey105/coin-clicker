@@ -975,11 +975,11 @@ body.other-platform .bottom-nav {
 
 /* Добавляем новые стили для иконок на iOS */
 body.ios .nav-icon {
-    transform: translateY(20px);
+    transform: translateY(13px);
     transition: transform 0.3s ease;
 }
 
 /* Убедимся, что активное состояние также учитывает сдвиг */
 body.ios .nav-btn:active .nav-icon {
-    transform: translateY(20px) scale(0.9);
+    transform: translateY(13px) scale(0.9);
 }
