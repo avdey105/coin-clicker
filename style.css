@@ -305,6 +305,14 @@ body.other-platform .bottom-nav {
     touch-action: manipulation;
     -webkit-touch-callout: none;
     -webkit-tap-highlight-color: transparent;
+    position: relative;
+}
+
+/* Специфичные стили для iOS */
+body.ios .nav-btn {
+    padding: 0;
+    display: inline-flex;
+    vertical-align: middle;
 }
 
 .nav-icon {
@@ -315,6 +323,15 @@ body.other-platform .bottom-nav {
     object-fit: contain;
     transition: all 0.2s ease;
     pointer-events: none;
+    display: block;
+    margin: 0 auto;
+}
+
+/* Специфичные стили для иконок на iOS */
+body.ios .nav-icon {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .nav-btn:active .nav-icon {
